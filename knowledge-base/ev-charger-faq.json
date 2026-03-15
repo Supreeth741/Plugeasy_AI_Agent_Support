@@ -1,0 +1,213 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2026-03-15",
+  "company": "Plugeasy",
+  "categories": [
+    {
+      "id": "charging-issues",
+      "name": "Charging Issues",
+      "faqs": [
+        {
+          "id": "ci-001",
+          "question": "My EV charger is not charging the vehicle",
+          "keywords": [
+            "not charging",
+            "won't charge",
+            "no charge",
+            "charging failed"
+          ],
+          "answer": "If your Plugeasy charger is not charging, please try these steps: First, check that the charger is properly plugged into the wall outlet and the vehicle. Second, ensure the LED indicator is showing green status. Third, try unplugging and re-plugging the connector to the vehicle. Fourth, check your home circuit breaker as it may have tripped. Fifth, if the charger shows a red LED, press the reset button on the unit. Finally, try power cycling by unplugging from wall, waiting 30 seconds, and plugging back in.",
+          "escalateIf": "Customer has tried all steps and issue persists",
+          "severity": "medium"
+        },
+        {
+          "id": "ci-002",
+          "question": "Charger stops mid-charge",
+          "keywords": [
+            "stops charging",
+            "interrupts",
+            "mid charge",
+            "partial charge",
+            "stops midway"
+          ],
+          "answer": "Charging interruptions can be caused by several things. First, overheating — check if the charger feels excessively hot and let it cool for 15 minutes. Second, power fluctuations — try a different outlet or check your home electrical panel. Third, it could be a vehicle-side issue — check your vehicle's charging settings and scheduled charging. Fourth, a loose connection — ensure the connector is firmly seated in the vehicle port.",
+          "escalateIf": "Happening repeatedly or charger is physically damaged",
+          "severity": "medium"
+        },
+        {
+          "id": "ci-003",
+          "question": "How to reset a charging session",
+          "keywords": [
+            "reset",
+            "restart charge",
+            "session reset",
+            "start over"
+          ],
+          "answer": "To reset a charging session, simply unplug the connector from your vehicle, wait about 10 seconds, then plug it back in. The charger will automatically start a new session. If the charger is unresponsive, press the reset button on the unit, or power cycle it by unplugging from the wall outlet for 30 seconds.",
+          "escalateIf": null,
+          "severity": "low"
+        },
+        {
+          "id": "ci-004",
+          "question": "Charger is stuck and not delivering power",
+          "keywords": [
+            "stuck",
+            "no power",
+            "not delivering",
+            "frozen",
+            "unresponsive"
+          ],
+          "answer": "If your charger appears stuck, first try pressing the reset button on the unit. If that does not work, power cycle the charger by unplugging it from the wall for 30 seconds. Also check your circuit breaker to make sure it has not tripped. If the connector is physically stuck in the vehicle, do not force it — check your vehicle's manual for the emergency release lever.",
+          "escalateIf": "Charger is physically stuck or power cycling does not help",
+          "severity": "high"
+        }
+      ]
+    },
+    {
+      "id": "led-indicators",
+      "name": "LED Status Indicators",
+      "faqs": [
+        {
+          "id": "led-001",
+          "question": "What does a red light mean?",
+          "keywords": ["red light", "red LED", "red indicator", "red blinking"],
+          "answer": "A red LED on your Plugeasy charger indicates a fault condition. A solid red light means a ground fault was detected — press the reset button. A blinking red light means overcurrent protection was triggered — check your electrical circuit. If the light turns red then off, it is an internal error — power cycle the unit by unplugging for 30 seconds.",
+          "escalateIf": "Red light persists after reset",
+          "severity": "high"
+        },
+        {
+          "id": "led-002",
+          "question": "What does the green light mean?",
+          "keywords": [
+            "green light",
+            "green LED",
+            "green blinking",
+            "green solid"
+          ],
+          "answer": "Green LED meanings: A solid green means the charger is powered on and ready to charge. A blinking green means the charger is actively charging your vehicle. A slow pulsing green means the charger is in standby mode, waiting for a vehicle to be connected.",
+          "escalateIf": null,
+          "severity": "low"
+        },
+        {
+          "id": "led-003",
+          "question": "What does the blue light mean?",
+          "keywords": ["blue light", "blue LED", "blue blinking"],
+          "answer": "A blue LED indicates WiFi or connectivity status. A blinking blue means the charger is in pairing mode and ready to connect to your WiFi network. A solid blue means it is connected to WiFi and communicating with the Plugeasy cloud.",
+          "escalateIf": null,
+          "severity": "low"
+        }
+      ]
+    },
+    {
+      "id": "connectivity",
+      "name": "WiFi and App Connectivity",
+      "faqs": [
+        {
+          "id": "conn-001",
+          "question": "Charger won't connect to WiFi",
+          "keywords": [
+            "wifi",
+            "wi-fi",
+            "connect",
+            "app",
+            "no connection",
+            "offline"
+          ],
+          "answer": "To connect your Plugeasy charger to WiFi: First, open the Plugeasy app and go to Settings, then Add Charger. Second, press and hold the WiFi button on the charger for 5 seconds until the blue LED blinks. Third, select your home WiFi network in the app. Fourth, enter your WiFi password. Please note that the charger supports 2.4 GHz WiFi only, not 5 GHz.",
+          "escalateIf": "Customer has tried multiple times and it still fails",
+          "severity": "low"
+        },
+        {
+          "id": "conn-002",
+          "question": "App is not showing my charger",
+          "keywords": [
+            "app",
+            "not showing",
+            "cant see",
+            "charger missing",
+            "app error"
+          ],
+          "answer": "If your charger is not appearing in the app, first make sure the charger is connected to WiFi — the blue LED should be solid. Then try closing and reopening the app. If that does not work, log out of the app and log back in. If the charger was recently installed, it may take a few minutes to appear after WiFi setup is complete.",
+          "escalateIf": null,
+          "severity": "low"
+        }
+      ]
+    },
+    {
+      "id": "installation",
+      "name": "Installation Questions",
+      "faqs": [
+        {
+          "id": "inst-001",
+          "question": "How to install the charger?",
+          "keywords": [
+            "install",
+            "setup",
+            "mount",
+            "wall mount",
+            "installation"
+          ],
+          "answer": "Plugeasy chargers should be installed by a certified electrician. The basic requirements are: A dedicated 30 amp or 40 amp circuit depending on your model. A proper wall outlet or hardwired connection. Mount height should be 3.5 to 4 feet from the ground. Outdoor models are IP65 rated and protected from rain. We can arrange professional installation for you — would you like to schedule one?",
+          "escalateIf": "Customer wants to schedule installation",
+          "severity": "low"
+        }
+      ]
+    },
+    {
+      "id": "billing-warranty",
+      "name": "Billing and Warranty",
+      "faqs": [
+        {
+          "id": "bw-001",
+          "question": "What is the warranty period?",
+          "keywords": [
+            "warranty",
+            "guarantee",
+            "coverage",
+            "repair",
+            "replace"
+          ],
+          "answer": "Plugeasy chargers come with a 3-year manufacturer warranty covering defects in materials and workmanship. The warranty does not cover damage from improper installation, power surges, or physical damage. For warranty claims, please have your serial number ready and I can connect you with our warranty team.",
+          "escalateIf": "Customer wants to file a warranty claim",
+          "severity": "low"
+        },
+        {
+          "id": "bw-002",
+          "question": "How do I get a refund?",
+          "keywords": ["refund", "return", "money back", "cancel order"],
+          "answer": "For refund requests, I need to connect you with our billing team who can assist you with the process. Let me transfer you now.",
+          "escalateIf": "ALWAYS escalate refund requests",
+          "severity": "medium"
+        }
+      ]
+    },
+    {
+      "id": "safety",
+      "name": "Safety Concerns",
+      "faqs": [
+        {
+          "id": "safe-001",
+          "question": "Charger is making unusual sounds or smells",
+          "keywords": [
+            "burning",
+            "smell",
+            "smoke",
+            "noise",
+            "sparking",
+            "hot",
+            "overheating",
+            "fire"
+          ],
+          "answer": "This is important — if you notice any burning smell, smoke, or sparking, please immediately unplug the charger from the wall outlet. Do not touch the charger if it appears damaged. Turn off the circuit breaker for that outlet. Do not use the charger until it has been inspected by a professional. I am connecting you to our safety team right away.",
+          "escalateIf": "ALWAYS escalate safety concerns",
+          "severity": "critical"
+        }
+      ]
+    }
+  ],
+  "escalationRules": {
+    "alwaysEscalate": ["safety", "warranty-claim", "refund", "legal"],
+    "escalateAfterAttempts": 3,
+    "escalationMessage": "Let me connect you with a specialist who can help you further with this."
+  }
+}

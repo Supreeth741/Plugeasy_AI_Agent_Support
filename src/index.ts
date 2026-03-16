@@ -7,7 +7,7 @@ const app = createApp();
 app.listen(config.port, () => {
   logger.info(
     { port: config.port, baseUrl: config.baseUrl },
-    "Plugeasy AI Agent Support server started",
+    "PlugEasy AI Agent Support server started",
   );
   logger.info("Waiting for incoming calls...");
 });

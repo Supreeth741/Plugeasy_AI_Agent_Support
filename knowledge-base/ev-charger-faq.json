@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "lastUpdated": "2026-03-15",
-  "company": "Plugeasy",
+  "company": "PlugEasy",
   "categories": [
     {
       "id": "charging-issues",
@@ -16,7 +16,7 @@
             "no charge",
             "charging failed"
           ],
-          "answer": "If your Plugeasy charger is not charging, please try these steps: First, check that the charger is properly plugged into the wall outlet and the vehicle. Second, ensure the LED indicator is showing green status. Third, try unplugging and re-plugging the connector to the vehicle. Fourth, check your home circuit breaker as it may have tripped. Fifth, if the charger shows a red LED, press the reset button on the unit. Finally, try power cycling by unplugging from wall, waiting 30 seconds, and plugging back in.",
+          "answer": "If your PlugEasy charger is not charging, please try these steps: First, check that the charger is properly plugged into the wall outlet and the vehicle. Second, ensure the LED indicator is showing green status. Third, try unplugging and re-plugging the connector to the vehicle. Fourth, check your home circuit breaker as it may have tripped. Fifth, if the charger shows a red LED, press the reset button on the unit. Finally, try power cycling by unplugging from wall, waiting 30 seconds, and plugging back in.",
           "escalateIf": "Customer has tried all steps and issue persists",
           "severity": "medium"
         },
@@ -71,7 +71,7 @@
           "id": "led-001",
           "question": "What does a red light mean?",
           "keywords": ["red light", "red LED", "red indicator", "red blinking"],
-          "answer": "A red LED on your Plugeasy charger indicates a fault condition. A solid red light means a ground fault was detected — press the reset button. A blinking red light means overcurrent protection was triggered — check your electrical circuit. If the light turns red then off, it is an internal error — power cycle the unit by unplugging for 30 seconds.",
+          "answer": "A red LED on your PlugEasy charger indicates a fault condition. A solid red light means a ground fault was detected — press the reset button. A blinking red light means overcurrent protection was triggered — check your electrical circuit. If the light turns red then off, it is an internal error — power cycle the unit by unplugging for 30 seconds.",
           "escalateIf": "Red light persists after reset",
           "severity": "high"
         },
@@ -92,7 +92,7 @@
           "id": "led-003",
           "question": "What does the blue light mean?",
           "keywords": ["blue light", "blue LED", "blue blinking"],
-          "answer": "A blue LED indicates WiFi or connectivity status. A blinking blue means the charger is in pairing mode and ready to connect to your WiFi network. A solid blue means it is connected to WiFi and communicating with the Plugeasy cloud.",
+          "answer": "A blue LED indicates WiFi or connectivity status. A blinking blue means the charger is in pairing mode and ready to connect to your WiFi network. A solid blue means it is connected to WiFi and communicating with the PlugEasy cloud.",
           "escalateIf": null,
           "severity": "low"
         }
@@ -113,7 +113,7 @@
             "no connection",
             "offline"
           ],
-          "answer": "To connect your Plugeasy charger to WiFi: First, open the Plugeasy app and go to Settings, then Add Charger. Second, press and hold the WiFi button on the charger for 5 seconds until the blue LED blinks. Third, select your home WiFi network in the app. Fourth, enter your WiFi password. Please note that the charger supports 2.4 GHz WiFi only, not 5 GHz.",
+          "answer": "To connect your PlugEasy charger to WiFi: First, open the PlugEasy app and go to Settings, then Add Charger. Second, press and hold the WiFi button on the charger for 5 seconds until the blue LED blinks. Third, select your home WiFi network in the app. Fourth, enter your WiFi password. Please note that the charger supports 2.4 GHz WiFi only, not 5 GHz.",
           "escalateIf": "Customer has tried multiple times and it still fails",
           "severity": "low"
         },
@@ -147,7 +147,7 @@
             "wall mount",
             "installation"
           ],
-          "answer": "Plugeasy chargers should be installed by a certified electrician. The basic requirements are: A dedicated 30 amp or 40 amp circuit depending on your model. A proper wall outlet or hardwired connection. Mount height should be 3.5 to 4 feet from the ground. Outdoor models are IP65 rated and protected from rain. We can arrange professional installation for you — would you like to schedule one?",
+          "answer": "PlugEasy chargers should be installed by a certified electrician. The basic requirements are: A dedicated 30 amp or 40 amp circuit depending on your model. A proper wall outlet or hardwired connection. Mount height should be 3.5 to 4 feet from the ground. Outdoor models are IP65 rated and protected from rain. We can arrange professional installation for you — would you like to schedule one?",
           "escalateIf": "Customer wants to schedule installation",
           "severity": "low"
         }
@@ -167,7 +167,7 @@
             "repair",
             "replace"
           ],
-          "answer": "Plugeasy chargers come with a 3-year manufacturer warranty covering defects in materials and workmanship. The warranty does not cover damage from improper installation, power surges, or physical damage. For warranty claims, please have your serial number ready and I can connect you with our warranty team.",
+          "answer": "PlugEasy chargers come with a 3-year manufacturer warranty covering defects in materials and workmanship. The warranty does not cover damage from improper installation, power surges, or physical damage. For warranty claims, please have your serial number ready and I can connect you with our warranty team.",
           "escalateIf": "Customer wants to file a warranty claim",
           "severity": "low"
         },

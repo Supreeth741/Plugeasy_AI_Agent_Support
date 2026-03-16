@@ -1,5 +1,5 @@
 {
-  "name": "plugeasy-ai-agent-support",
+  "name": "PlugEasy-ai-agent-support",
   "version": "0.1.0",
   "description": "AI-powered EV charger customer support call bot",
   "main": "dist/index.js",

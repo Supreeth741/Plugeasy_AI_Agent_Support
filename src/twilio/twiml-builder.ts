@@ -18,7 +18,7 @@ export function buildGreetingTwiml(gatherCallbackUrl: string): string {
 
   gather.say(
     { voice: VOICE, language: LANGUAGE },
-    "Hello! Thank you for calling Plugeasy EV Charger Support. How can I help you today?",
+    "Hello! Thank you for calling PlugEasy EV Charger Support. How can I help you today?",
   );
 
   // If no speech detected, prompt again
@@ -52,7 +52,7 @@ export function buildResponseTwiml(
   // If no speech, say goodbye
   response.say(
     { voice: VOICE, language: LANGUAGE },
-    "Thank you for calling Plugeasy. Goodbye!",
+    "Thank you for calling PlugEasy. Goodbye!",
   );
 
   return response.toString();

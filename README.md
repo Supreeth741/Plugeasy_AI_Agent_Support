@@ -8,7 +8,7 @@ AI-powered customer support call bot for Plugeasy EV chargers. Customers call in
 Customer calls → Twilio receives call
   → Greeting + record customer's voice
   → OpenAI Whisper transcribes speech (auto-detects language)
-  → GPT-4 generates response using EV charger FAQ knowledge
+  → Google Gemini generates response using EV charger FAQ knowledge
   → Google Cloud TTS speaks the answer back
   → Loop until resolved or escalate to human operator
 ```
@@ -21,7 +21,7 @@ Handles ~60–70% of calls automatically. Supports English, Hindi, Kannada, Tami
 | -------------- | ------------------------------ |
 | Call handling  | Twilio Voice                   |
 | Speech-to-Text | OpenAI Whisper                 |
-| AI brain       | GPT-4                          |
+| AI brain       | Google Gemini                  |
 | Text-to-Speech | Google Cloud TTS               |
 | Server         | Node.js + TypeScript + Express |
 
@@ -32,7 +32,7 @@ src/
 ├── index.ts                          # Entry point
 ├── config/
 │   ├── env.ts                        # Environment variable validation
-│   └── constants.ts                  # Voice map, GPT settings, call limits
+│   └── constants.ts                  # Voice map, Gemini settings, call limits
 ├── server/
 │   ├── app.ts                        # Express setup
 │   └── routes/
@@ -40,14 +40,14 @@ src/
 │       └── health.routes.ts          # GET /health
 ├── services/
 │   ├── stt.service.ts                # Whisper transcription + language detection
-│   ├── llm.service.ts                # GPT-4 response generation
+│   ├── llm.service.ts                # Gemini response generation
 │   ├── tts.service.ts                # Google Cloud TTS synthesis
 │   └── call-handler.service.ts       # Orchestrates the full call pipeline
 ├── twilio/
 │   ├── webhook-handler.ts            # Incoming call + recording handlers
 │   └── twiml-builder.ts              # TwiML XML builders
 ├── knowledge/
-│   ├── system-prompt.ts              # GPT-4 persona and rules
+│   ├── system-prompt.ts              # Gemini persona and rules
 │   └── faq-data.ts                   # Loads FAQ from JSON
 ├── utils/
 │   └── logger.ts                     # Pino structured logging
@@ -59,7 +59,7 @@ knowledge-base/
 
 scripts/
 ├── test-stt.ts                       # Test Whisper standalone
-├── test-llm.ts                       # Test GPT-4 with FAQ prompt
+├── test-llm.ts                       # Test Gemini with FAQ prompt
 └── test-tts.ts                       # Test Google Cloud TTS
 ```
 
@@ -88,11 +88,16 @@ Edit `.env` with your API keys:
 3. Buy a phone number with Voice capability
 4. Set the phone number's voice webhook to `https://{your-url}/twilio/voice` (HTTP POST)
 
-**OpenAI** (Whisper STT + GPT-4)
+**OpenAI** (Whisper STT)
 
 1. Sign up at https://platform.openai.com/signup
 2. Create an API key at https://platform.openai.com/api-keys
-3. Add billing credits ($5+ required for GPT-4 access)
+3. Add billing credits
+
+**Google Gemini** (AI brain)
+
+1. Go to https://aistudio.google.com/
+2. Create an API key from Google AI Studio
 
 **Google Cloud TTS** (text-to-speech)
 
@@ -125,7 +130,7 @@ Call your Twilio phone number and describe an EV charger issue.
 ## Test Individual Services
 
 ```bash
-# Test GPT-4 with the FAQ knowledge base
+# Test Gemini with the FAQ knowledge base
 npm run test:llm "My charger shows a red light"
 
 # Test Whisper speech-to-text (provide a .wav file)
@@ -166,5 +171,5 @@ Edit `knowledge-base/ev-charger-faq.json` to add or update FAQ entries. The serv
 | `npm run build`    | Compile TypeScript to `dist/`    |
 | `npm start`        | Run compiled production server   |
 | `npm run test:stt` | Test Whisper STT                 |
-| `npm run test:llm` | Test GPT-4 responses             |
+| `npm run test:llm` | Test Gemini responses            |
 | `npm run test:tts` | Test Google Cloud TTS            |

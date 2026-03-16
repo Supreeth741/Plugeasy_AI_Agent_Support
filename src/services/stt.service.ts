@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 import { config } from "../config/env";
-import { OPENAI_SETTINGS } from "../config/constants";
+import { WHISPER_SETTINGS } from "../config/constants";
 import { logger } from "../utils/logger";
 import { STTResult } from "../types";
 
@@ -17,7 +17,7 @@ export async function transcribeAudio(
   });
 
   const response = await openai.audio.transcriptions.create({
-    model: OPENAI_SETTINGS.WHISPER_MODEL,
+    model: WHISPER_SETTINGS.WHISPER_MODEL,
     file,
     response_format: "verbose_json",
   });

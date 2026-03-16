@@ -1,5 +1,5 @@
 /**
- * Test script: GPT-4 LLM with EV FAQ system prompt
+ * Test script: Gemini LLM with EV FAQ system prompt
  * Usage: npx tsx scripts/test-llm.ts "My charger shows a red light"
  */
 import "dotenv/config";
@@ -16,7 +16,7 @@ async function main() {
   const faqData = loadFAQData();
   const systemPrompt = buildSystemPrompt(faqData);
 
-  console.log("Sending to GPT-4...\n");
+  console.log("Sending to Gemini...\n");
 
   const result = await generateResponse(systemPrompt, [], userMessage, "en");
 

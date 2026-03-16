@@ -5,11 +5,14 @@ export const CALL_SETTINGS = {
   ESCALATION_AFTER_TURNS: 3,
 } as const;
 
-export const OPENAI_SETTINGS = {
-  GPT_MODEL: "gpt-4-turbo",
+export const GEMINI_SETTINGS = {
+  MODEL: "gemini-2.5-flash",
+  MAX_OUTPUT_TOKENS: 300,
+  TEMPERATURE: 0.3,
+} as const;
+
+export const WHISPER_SETTINGS = {
   WHISPER_MODEL: "whisper-1",
-  GPT_MAX_TOKENS: 300,
-  GPT_TEMPERATURE: 0.3,
 } as const;
 
 export const TTS_VOICE_MAP: Record<

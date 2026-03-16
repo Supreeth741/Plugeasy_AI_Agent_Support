@@ -45,12 +45,16 @@ function getOrCreateSession(callSid: string, from: string): CallSession {
 }
 
 async function downloadRecording(recordingUrl: string): Promise<Buffer> {
-  // Twilio recordings require authentication
-  const url = new URL(recordingUrl);
-  url.username = config.twilioAccountSid;
-  url.password = config.twilioAuthToken;
+  // Twilio recordings require authentication via Basic Auth header
+  const credentials = Buffer.from(
+    `${config.twilioAccountSid}:${config.twilioAuthToken}`,
+  ).toString("base64");
 
-  const response = await fetch(url.toString());
+  const response = await fetch(recordingUrl, {
+    headers: {
+      Authorization: `Basic ${credentials}`,
+    },
+  });
   if (!response.ok) {
     throw new Error(
       `Failed to download recording: ${response.status} ${response.statusText}`,
@@ -72,15 +76,21 @@ export async function handleCallTurn(
   logger.info({ callSid, turn: session.turnCount }, "Processing call turn");
 
   // 1. Download the recording from Twilio
+  logger.info({ callSid }, "Step 1: Downloading recording from Twilio...");
   const audioBuffer = await downloadRecording(recordingUrl);
+  logger.info(
+    { callSid, bytes: audioBuffer.length },
+    "Step 1: Recording downloaded",
+  );
 
   // 2. Transcribe with Whisper
+  logger.info({ callSid }, "Step 2: Transcribing with Whisper...");
   const sttResult = await transcribeAudio(audioBuffer);
   session.detectedLanguage = sttResult.language;
 
   logger.info(
     { callSid, text: sttResult.text, language: sttResult.language },
-    "Transcription result",
+    "Step 2: Transcription complete",
   );
 
   // 3. Check if we should force escalation (too many turns)
@@ -88,6 +98,7 @@ export async function handleCallTurn(
     session.turnCount >= CALL_SETTINGS.ESCALATION_AFTER_TURNS;
 
   // 4. Generate AI response
+  logger.info({ callSid }, "Step 3: Generating Gemini response...");
   const faqData = loadFAQData();
   const systemPrompt = buildSystemPrompt(faqData);
 
@@ -96,6 +107,10 @@ export async function handleCallTurn(
     session.conversationHistory,
     sttResult.text,
     sttResult.language,
+  );
+  logger.info(
+    { callSid, text: llmResponse.text },
+    "Step 3: Gemini response generated",
   );
 
   // 5. Update conversation history
@@ -114,6 +129,7 @@ export async function handleCallTurn(
   }
 
   // 6. Generate TTS audio
+  logger.info({ callSid }, "Step 4: Generating TTS audio...");
   const audioContent = await synthesizeSpeech(
     llmResponse.text,
     sttResult.language,

@@ -2,52 +2,58 @@ import twilio from "twilio";
 
 const { VoiceResponse } = twilio.twiml;
 
-export function buildGreetingTwiml(
-  recordingCallbackUrl: string,
-  maxRecordingSeconds: number,
-): string {
+const VOICE = "Polly.Aditi" as const;
+const LANGUAGE = "en-IN" as const;
+
+export function buildGreetingTwiml(gatherCallbackUrl: string): string {
   const response = new VoiceResponse();
 
-  response.say(
-    { voice: "Polly.Aditi", language: "en-IN" },
-    "Welcome to Plugeasy EV Charger Support. Please describe your issue after the beep.",
-  );
-
-  response.record({
-    maxLength: maxRecordingSeconds,
-    action: recordingCallbackUrl,
-    playBeep: true,
-    trim: "trim-silence",
+  const gather = response.gather({
+    input: ["speech"],
+    action: gatherCallbackUrl,
+    method: "POST",
+    speechTimeout: "auto",
+    language: LANGUAGE,
   });
 
-  // Fallback if no recording received
-  response.say("Sorry, I did not receive any input. Goodbye.");
+  gather.say(
+    { voice: VOICE, language: LANGUAGE },
+    "Hello! Thank you for calling Plugeasy EV Charger Support. How can I help you today?",
+  );
+
+  // If no speech detected, prompt again
+  response.say(
+    { voice: VOICE, language: LANGUAGE },
+    "I did not hear anything. Goodbye.",
+  );
 
   return response.toString();
 }
 
 export function buildResponseTwiml(
-  audioUrl: string,
-  recordingCallbackUrl: string,
-  maxRecordingSeconds: number,
+  responseText: string,
+  gatherCallbackUrl: string,
 ): string {
   const response = new VoiceResponse();
 
-  response.play(audioUrl);
-
-  response.say(
-    { voice: "Polly.Aditi", language: "en-IN" },
-    "Is there anything else I can help you with? Please speak after the beep.",
-  );
-
-  response.record({
-    maxLength: maxRecordingSeconds,
-    action: recordingCallbackUrl,
-    playBeep: true,
-    trim: "trim-silence",
+  const gather = response.gather({
+    input: ["speech"],
+    action: gatherCallbackUrl,
+    method: "POST",
+    speechTimeout: "auto",
+    language: LANGUAGE,
   });
 
-  response.say("Thank you for calling Plugeasy. Goodbye.");
+  gather.say(
+    { voice: VOICE, language: LANGUAGE },
+    responseText + " Is there anything else I can help you with?",
+  );
+
+  // If no speech, say goodbye
+  response.say(
+    { voice: VOICE, language: LANGUAGE },
+    "Thank you for calling Plugeasy. Goodbye!",
+  );
 
   return response.toString();
 }
@@ -58,13 +64,13 @@ export function buildEscalationTwiml(
 ): string {
   const response = new VoiceResponse();
 
-  response.say({ voice: "Polly.Aditi", language: "en-IN" }, escalationMessage);
+  response.say({ voice: VOICE, language: LANGUAGE }, escalationMessage);
 
   if (escalationNumber) {
     response.dial(escalationNumber);
   } else {
     response.say(
-      { voice: "Polly.Aditi", language: "en-IN" },
+      { voice: VOICE, language: LANGUAGE },
       "Our team will call you back shortly. Thank you for your patience. Goodbye.",
     );
   }
@@ -76,8 +82,8 @@ export function buildErrorTwiml(): string {
   const response = new VoiceResponse();
 
   response.say(
-    { voice: "Polly.Aditi", language: "en-IN" },
-    "I apologize, but I am having trouble processing your request right now. Please try calling back in a few minutes. Goodbye.",
+    { voice: VOICE, language: LANGUAGE },
+    "I apologize, but I am having trouble right now. Please try calling back in a few minutes. Goodbye.",
   );
 
   return response.toString();

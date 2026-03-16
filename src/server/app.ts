@@ -1,5 +1,4 @@
 import express from "express";
-import path from "path";
 import { logger } from "../utils/logger";
 import { twilioRoutes } from "./routes/twilio.routes";
 import { healthRoutes } from "./routes/health.routes";
@@ -10,10 +9,6 @@ export function createApp(): express.Application {
   // Parse Twilio webhook bodies (application/x-www-form-urlencoded)
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
-
-  // Serve generated TTS audio files
-  const audioDir = path.join(process.cwd(), "tmp", "audio");
-  app.use("/audio", express.static(audioDir));
 
   // Request logging middleware
   app.use((req, _res, next) => {

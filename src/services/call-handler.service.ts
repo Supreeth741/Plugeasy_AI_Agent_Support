@@ -1,30 +1,16 @@
-import fs from "fs";
-import path from "path";
-import { config } from "../config/env";
 import { CALL_SETTINGS } from "../config/constants";
 import { logger } from "../utils/logger";
 import { CallSession, Message } from "../types";
-import { transcribeAudio } from "./stt.service";
 import { generateResponse } from "./llm.service";
-import { synthesizeSpeech } from "./tts.service";
 import { loadFAQData } from "../knowledge/faq-data";
 import { buildSystemPrompt } from "../knowledge/system-prompt";
 
 // In-memory call session store
 const sessions = new Map<string, CallSession>();
 
-// Directory for temporary TTS audio files
-const AUDIO_DIR = path.join(process.cwd(), "tmp", "audio");
-
-// Ensure audio directory exists
-if (!fs.existsSync(AUDIO_DIR)) {
-  fs.mkdirSync(AUDIO_DIR, { recursive: true });
-}
-
 interface CallTurnResult {
   text: string;
   shouldEscalate: boolean;
-  audioFilename: string;
 }
 
 function getOrCreateSession(callSid: string, from: string): CallSession {
@@ -44,78 +30,42 @@ function getOrCreateSession(callSid: string, from: string): CallSession {
   return session;
 }
 
-async function downloadRecording(recordingUrl: string): Promise<Buffer> {
-  // Twilio recordings require authentication via Basic Auth header
-  const credentials = Buffer.from(
-    `${config.twilioAccountSid}:${config.twilioAuthToken}`,
-  ).toString("base64");
-
-  const response = await fetch(recordingUrl, {
-    headers: {
-      Authorization: `Basic ${credentials}`,
-    },
-  });
-  if (!response.ok) {
-    throw new Error(
-      `Failed to download recording: ${response.status} ${response.statusText}`,
-    );
-  }
-
-  const arrayBuffer = await response.arrayBuffer();
-  return Buffer.from(arrayBuffer);
-}
-
 export async function handleCallTurn(
   callSid: string,
   from: string,
-  recordingUrl: string,
+  userText: string,
 ): Promise<CallTurnResult> {
   const session = getOrCreateSession(callSid, from);
   session.turnCount++;
 
-  logger.info({ callSid, turn: session.turnCount }, "Processing call turn");
-
-  // 1. Download the recording from Twilio
-  logger.info({ callSid }, "Step 1: Downloading recording from Twilio...");
-  const audioBuffer = await downloadRecording(recordingUrl);
   logger.info(
-    { callSid, bytes: audioBuffer.length },
-    "Step 1: Recording downloaded",
+    { callSid, turn: session.turnCount, userText },
+    "Processing call turn",
   );
 
-  // 2. Transcribe with Whisper
-  logger.info({ callSid }, "Step 2: Transcribing with Whisper...");
-  const sttResult = await transcribeAudio(audioBuffer);
-  session.detectedLanguage = sttResult.language;
-
-  logger.info(
-    { callSid, text: sttResult.text, language: sttResult.language },
-    "Step 2: Transcription complete",
-  );
-
-  // 3. Check if we should force escalation (too many turns)
+  // Check if we should force escalation (too many turns)
   const forceEscalate =
     session.turnCount >= CALL_SETTINGS.ESCALATION_AFTER_TURNS;
 
-  // 4. Generate AI response
-  logger.info({ callSid }, "Step 3: Generating Gemini response...");
+  // Generate AI response
   const faqData = loadFAQData();
   const systemPrompt = buildSystemPrompt(faqData);
 
   const llmResponse = await generateResponse(
     systemPrompt,
     session.conversationHistory,
-    sttResult.text,
-    sttResult.language,
-  );
-  logger.info(
-    { callSid, text: llmResponse.text },
-    "Step 3: Gemini response generated",
+    userText,
+    session.detectedLanguage,
   );
 
-  // 5. Update conversation history
+  logger.info(
+    { callSid, response: llmResponse.text },
+    "Gemini response generated",
+  );
+
+  // Update conversation history
   session.conversationHistory.push(
-    { role: "user", content: sttResult.text },
+    { role: "user", content: userText },
     { role: "assistant", content: llmResponse.text },
   );
 
@@ -128,22 +78,9 @@ export async function handleCallTurn(
     );
   }
 
-  // 6. Generate TTS audio
-  logger.info({ callSid }, "Step 4: Generating TTS audio...");
-  const audioContent = await synthesizeSpeech(
-    llmResponse.text,
-    sttResult.language,
-  );
-  const audioFilename = `${callSid}-${session.turnCount}.mp3`;
-  const audioPath = path.join(AUDIO_DIR, audioFilename);
-  fs.writeFileSync(audioPath, audioContent);
-
-  logger.info({ callSid, audioFilename }, "TTS audio saved");
-
   return {
     text: llmResponse.text,
     shouldEscalate,
-    audioFilename,
   };
 }
 

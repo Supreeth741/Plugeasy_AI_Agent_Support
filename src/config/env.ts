@@ -9,10 +9,7 @@ export interface AppConfig {
   twilioAccountSid: string;
   twilioAuthToken: string;
   twilioPhoneNumber: string;
-  openaiApiKey: string;
   geminiApiKey: string;
-  googleCredentialsPath: string;
-  maxRecordingSeconds: number;
   maxConversationTurns: number;
   escalationPhoneNumber: string;
 }
@@ -33,14 +30,7 @@ export function loadConfig(): AppConfig {
     twilioAccountSid: requireEnv("TWILIO_ACCOUNT_SID"),
     twilioAuthToken: requireEnv("TWILIO_AUTH_TOKEN"),
     twilioPhoneNumber: requireEnv("TWILIO_PHONE_NUMBER"),
-    openaiApiKey: requireEnv("OPENAI_API_KEY"),
     geminiApiKey: requireEnv("GEMINI_API_KEY"),
-    googleCredentialsPath:
-      process.env.GOOGLE_APPLICATION_CREDENTIALS || "./google-credentials.json",
-    maxRecordingSeconds: parseInt(
-      process.env.MAX_RECORDING_SECONDS || "30",
-      10,
-    ),
     maxConversationTurns: parseInt(
       process.env.MAX_CONVERSATION_TURNS || "10",
       10,

@@ -5,15 +5,23 @@ import { generateResponse } from "./llm.service";
 import { loadFAQData } from "../knowledge/faq-data";
 import { buildSystemPrompt } from "../knowledge/system-prompt";
 
+import { config } from "../config/env";
+import { createCallLog, updateCallLog } from "./call-log.service";
+
 // In-memory call session store
 const sessions = new Map<string, CallSession>();
 
-interface CallTurnResult {
+export interface CallTurnResult {
   text: string;
   shouldEscalate: boolean;
+  detectedLanguage: string;
+  turnNumber: number;
 }
 
-function getOrCreateSession(callSid: string, from: string): CallSession {
+function getOrCreateSession(
+  callSid: string,
+  from: string,
+): { session: CallSession; isNew: boolean } {
   let session = sessions.get(callSid);
   if (!session) {
     session = {
@@ -26,8 +34,9 @@ function getOrCreateSession(callSid: string, from: string): CallSession {
     };
     sessions.set(callSid, session);
     logger.info({ callSid, from }, "New call session created");
+    return { session, isNew: true };
   }
-  return session;
+  return { session, isNew: false };
 }
 
 export async function handleCallTurn(
@@ -35,7 +44,14 @@ export async function handleCallTurn(
   from: string,
   userText: string,
 ): Promise<CallTurnResult> {
-  const session = getOrCreateSession(callSid, from);
+  const { session, isNew } = getOrCreateSession(callSid, from);
+
+  if (isNew) {
+    createCallLog(callSid, from, config.twilioPhoneNumber).catch((err) =>
+      logger.error({ callSid, err }, "Failed to create call log"),
+    );
+  }
+
   session.turnCount++;
 
   logger.info(
@@ -63,6 +79,11 @@ export async function handleCallTurn(
     "Gemini response generated",
   );
 
+  // Update detected language
+  if (llmResponse.detectedLanguage) {
+    session.detectedLanguage = llmResponse.detectedLanguage;
+  }
+
   // Update conversation history
   session.conversationHistory.push(
     { role: "user", content: userText },
@@ -78,14 +99,42 @@ export async function handleCallTurn(
     );
   }
 
+  // Update MongoDB (fire-and-forget)
+  updateCallLog(callSid, {
+    turnCount: session.turnCount,
+    conversationHistory: session.conversationHistory,
+    detectedLanguage: session.detectedLanguage,
+  }).catch((err) =>
+    logger.error({ callSid, err }, "Failed to update call log"),
+  );
+
   return {
     text: llmResponse.text,
     shouldEscalate,
+    detectedLanguage: session.detectedLanguage,
+    turnNumber: session.turnCount,
   };
+}
+
+export function getSessionData(callSid: string): CallSession | undefined {
+  return sessions.get(callSid);
 }
 
 // Clean up session when call ends
 export function cleanupSession(callSid: string): void {
+  const session = sessions.get(callSid);
   sessions.delete(callSid);
+
+  if (session) {
+    updateCallLog(callSid, {
+      status: "completed",
+      endTime: new Date(),
+      turnCount: session.turnCount,
+      conversationHistory: session.conversationHistory,
+    }).catch((err) =>
+      logger.error({ callSid, err }, "Failed to finalize call log"),
+    );
+  }
+
   logger.info({ callSid }, "Call session cleaned up");
 }

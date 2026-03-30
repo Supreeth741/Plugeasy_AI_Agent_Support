@@ -12,6 +12,7 @@ export interface AppConfig {
   geminiApiKey: string;
   maxConversationTurns: number;
   escalationPhoneNumber: string;
+  mongodbUri: string;
 }
 
 function requireEnv(key: string): string {
@@ -36,6 +37,7 @@ export function loadConfig(): AppConfig {
       10,
     ),
     escalationPhoneNumber: process.env.ESCALATION_PHONE_NUMBER || "",
+    mongodbUri: process.env.MONGODB_URI || "mongodb://localhost:27017/plugeasy",
   };
 }
 

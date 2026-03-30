@@ -6,6 +6,7 @@ export interface STTResult {
 export interface LLMResponse {
   text: string;
   shouldEscalate: boolean;
+  detectedLanguage: string;
 }
 
 export interface Message {

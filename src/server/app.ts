@@ -1,7 +1,9 @@
 import express from "express";
+import path from "path";
 import { logger } from "../utils/logger";
 import { twilioRoutes } from "./routes/twilio.routes";
 import { healthRoutes } from "./routes/health.routes";
+import { apiRoutes } from "./routes/api.routes";
 
 export function createApp(): express.Application {
   const app = express();
@@ -16,8 +18,22 @@ export function createApp(): express.Application {
     next();
   });
 
-  // Routes
+  // Serve generated audio files
+  app.use("/audio", express.static(path.join(process.cwd(), "tmp", "audio")));
+
+  // Serve dashboard static files
+  app.use(
+    "/dashboard",
+    express.static(path.join(process.cwd(), "public", "dashboard")),
+  );
+
+  // API routes
+  app.use("/api", apiRoutes);
+
+  // Twilio routes
   app.use("/twilio", twilioRoutes);
+
+  // Health check
   app.use("/", healthRoutes);
 
   return app;

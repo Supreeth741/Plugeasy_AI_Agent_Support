@@ -39,11 +39,21 @@ export async function generateResponse(
   const rawText =
     result.response.text() || "I apologize, I could not generate a response.";
 
+  // Parse language tag
+  const langMatch = rawText.match(/\[LANG:(\w{2})\]/i);
+  const parsedLanguage = langMatch ? langMatch[1] : detectedLanguage || "en";
+
   // Check for escalation signals in the response
   const shouldEscalate = /\[ESCALATE\]/i.test(rawText);
-  const text = rawText.replace(/\[ESCALATE\]/gi, "").trim();
+  const text = rawText
+    .replace(/\[LANG:\w{2}\]/gi, "")
+    .replace(/\[ESCALATE\]/gi, "")
+    .trim();
 
-  logger.info({ text, shouldEscalate }, "LLM response generated");
+  logger.info(
+    { text, shouldEscalate, parsedLanguage },
+    "LLM response generated",
+  );
 
-  return { text, shouldEscalate };
+  return { text, shouldEscalate, detectedLanguage: parsedLanguage };
 }

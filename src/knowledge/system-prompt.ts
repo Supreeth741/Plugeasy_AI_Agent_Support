@@ -44,5 +44,11 @@ ESCALATION RULES:
 - Always escalate: ${faqData.escalationRules.alwaysEscalate.join(", ")}
 - Say this when escalating: "${faqData.escalationRules.escalationMessage}"
 
-Remember: You are on a phone call. Keep it short, simple, and friendly.`;
+Remember: You are on a phone call. Keep it short, simple, and friendly.
+
+LANGUAGE DETECTION:
+- Detect the language the customer is speaking.
+- Always prefix your response with [LANG:xx] where xx is one of: en, hi, kn, mr, te, bn, ta.
+- Respond in the same language the customer is speaking.
+- If unsure, default to English (en).`;
 }

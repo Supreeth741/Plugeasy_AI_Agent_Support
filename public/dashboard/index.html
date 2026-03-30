@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PlugEasy Dashboard</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1>PlugEasy Dashboard</h1>
+      <div>
+        <span id="escalation-badge" class="badge hidden">0</span>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="tabs">
+        <button
+          class="tab active"
+          data-tab="calls"
+          onclick="switchTab('calls')"
+        >
+          Call Logs
+        </button>
+        <button
+          class="tab"
+          data-tab="escalations"
+          onclick="switchTab('escalations')"
+        >
+          Escalations
+        </button>
+      </div>
+
+      <!-- Call Logs Tab -->
+      <div id="tab-calls">
+        <div class="card">
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Call SID</th>
+                  <th>From</th>
+                  <th>Time</th>
+                  <th>Duration</th>
+                  <th>Turns</th>
+                  <th>Language</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="calls-tbody"></tbody>
+            </table>
+          </div>
+          <div id="calls-empty" class="empty-state hidden">
+            <p>No call logs yet. Make a call to see logs here.</p>
+          </div>
+          <div class="pagination" id="calls-pagination"></div>
+        </div>
+      </div>
+
+      <!-- Escalations Tab -->
+      <div id="tab-escalations" style="display: none">
+        <div class="card">
+          <div id="escalations-list"></div>
+          <div id="escalations-empty" class="empty-state hidden">
+            <p>No escalations yet.</p>
+          </div>
+          <div class="pagination" id="escalations-pagination"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div
+      id="toast"
+      class="toast hidden"
+      onclick="this.classList.add('hidden')"
+    ></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/dashboard.js"></script>
+  </body>
+</html>

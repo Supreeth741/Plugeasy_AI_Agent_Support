@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Escalation Chat - PlugEasy Dashboard</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1>PlugEasy Dashboard</h1>
+    </header>
+
+    <div class="container">
+      <a href="index.html" class="back-link">&larr; Back to Dashboard</a>
+
+      <div class="card chat-container" id="chat-container">
+        <div class="chat-header">
+          <div>
+            <h2 id="caller-phone">Loading...</h2>
+            <span id="escalation-status" class="status"></span>
+          </div>
+          <button
+            class="btn btn-success"
+            id="resolve-btn"
+            onclick="resolveEscalation()"
+          >
+            Mark as Resolved
+          </button>
+        </div>
+
+        <!-- Call Transcript -->
+        <div class="transcript-section" id="transcript-section">
+          <h3>Call Transcript</h3>
+          <div id="transcript-messages"></div>
+        </div>
+
+        <!-- AI Chat Messages -->
+        <div class="chat-messages" id="chat-messages">
+          <div class="empty-state" id="chat-empty">
+            <p>
+              Chat with AI to resolve this escalation. Type a message below.
+            </p>
+          </div>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="chat-input" id="chat-input-area">
+          <input
+            type="text"
+            id="message-input"
+            placeholder="Ask AI about this escalation..."
+            onkeydown="if (event.key === 'Enter') sendMessage();"
+          />
+          <button class="btn btn-primary" id="send-btn" onclick="sendMessage()">
+            Send
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/escalation.js"></script>
+  </body>
+</html>
